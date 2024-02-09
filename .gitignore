@@ -127,5 +127,6 @@ terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform,jetbrains+all
 
+.terraform.lock.hcl
 localTerraform.sh
 setLocalVariables.sh

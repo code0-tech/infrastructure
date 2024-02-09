@@ -1,0 +1,54 @@
+stages:
+  - terraform-plan
+  - terraform-apply
+
+default:
+  tags:
+    - infra
+
+.tf:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  before_script:
+    - cd $TF_ROOT
+
+tf-plan:main:
+  extends:
+    - .tf
+  stage: terraform-plan
+  script:
+    - gitlab-terraform plan -no-color | tee output
+    - gitlab-terraform plan-json
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
+      grep -E "Plan:|No changes" output
+      echo -e "\e[0Ksection_end:`date +%s`:glpa_summary\r\e[0K"
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - $TF_ROOT/plan.cache
+    reports:
+      terraform: $TF_ROOT/plan.json
+  variables:
+    TF_STATE_NAME: main
+    TF_ROOT: '.'
+
+tf-apply:main:
+  extends:
+    - .tf
+  stage: terraform-apply
+  needs:
+    - tf-plan:main
+  script:
+    - gitlab-terraform apply -no-color | tee output
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
+      grep "Apply complete!" output
+      echo -e "\e[0Ksection_end:`date +%s`:glpa_summary\r\e[0K"
+  environment:
+    name: main
+    deployment_tier: production
+  variables: !reference ["tf-plan:main", variables]
+  rules:
+    - if: $C0_GH_REF == "refs/heads/main"
+      when: delayed
+      start_in: 2 min
