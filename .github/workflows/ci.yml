@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Taucher2003/GitLab-Pipeline-Action@1.6.2
+        name: Run pipeline
+        id: pipeline
+        with:
+          GL_SERVER_URL: https://gitlab.com
+          GL_PROJECT_ID: '54779398'
+          GL_RUNNER_TOKEN: ${{ secrets.GL_INFRA_RUNNER_TOKEN }}
+          GL_API_TOKEN: ${{ secrets.GL_API_TOKEN }}
+          SHOW_JOB_LOGS: none
+        env:
+          GLPA_C0_GH_REF: ${{ github.ref }}
+          GLPA_TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GLPA_TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: <!-- glpa_comment:pipeline -->
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v4
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            <!-- glpa_comment:pipeline -->
+            ${{ steps.pipeline.outputs.SUMMARY_TEXT }}
+          edit-mode: replace
