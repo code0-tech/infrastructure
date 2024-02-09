@@ -26,6 +26,7 @@ jobs:
           GLPA_C0_GH_REF: ${{ github.ref }}
           GLPA_TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GLPA_TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GLPA_TF_VAR_gitlab_api_token: ${{ secrets.GL_API_TOKEN }}
 
       - name: Find existing comment
         uses: peter-evans/find-comment@v3

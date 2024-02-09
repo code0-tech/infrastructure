@@ -6,11 +6,20 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "4.24.0"
     }
+    gitlab = {
+      source = "gitlabhq/gitlab"
+      version = "16.8.1"
+    }
   }
 }
 
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
+}
+
+provider "gitlab" {
+  token = var.gitlab_api_token
+  base_url = "https://gitlab.com/api/v4/"
 }
 
 module "domain" {
