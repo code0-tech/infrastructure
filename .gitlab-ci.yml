@@ -16,11 +16,11 @@ tf-plan:main:
     - .tf
   stage: terraform-plan
   script:
-    - gitlab-terraform plan -no-color | tee output
+    - gitlab-terraform plan | tee output
     - gitlab-terraform plan-json
     - |
       echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
-      grep -E "Plan:|No changes" output
+      grep -E "Plan:|No changes" output | sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g"
       echo -e "\e[0Ksection_end:`date +%s`:glpa_summary\r\e[0K"
   artifacts:
     expire_in: 7 days
@@ -39,10 +39,10 @@ tf-apply:main:
   needs:
     - tf-plan:main
   script:
-    - gitlab-terraform apply -no-color | tee output
+    - gitlab-terraform apply | tee output
     - |
       echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
-      grep "Apply complete!" output
+      grep "Apply complete!" output | sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g"
       echo -e "\e[0Ksection_end:`date +%s`:glpa_summary\r\e[0K"
   environment:
     name: main
