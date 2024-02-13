@@ -32,3 +32,10 @@ module "docs_pages" {
   gitlab_project_path = "code0-tech/telescopium"
   gitlab_unique_pages_url = "docs-code0-tech-c91f18c0d2259c041bf05138b194e6bb082059fe38eff2e.gitlab.io"
 }
+
+resource "cloudflare_record" "github_verification" {
+  name    = "_github-challenge-code0-tech-org"
+  type    = "TXT"
+  zone_id = data.cloudflare_zone.main_domain.id
+  value   = "e3447326f4"
+}
