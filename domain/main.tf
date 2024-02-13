@@ -38,4 +38,5 @@ resource "cloudflare_record" "github_verification" {
   type    = "TXT"
   zone_id = data.cloudflare_zone.main_domain.id
   value   = "e3447326f4"
+  comment = "Managed by Terraform"
 }
