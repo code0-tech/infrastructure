@@ -25,7 +25,7 @@ resource "cloudflare_zone_settings_override" "main" {
 }
 
 module "docs_pages" {
-  source = "../modules/gitlab/pages_domain"
+  source = "../../modules/gitlab/pages_domain"
 
   cloudflare_domain_name = "docs"
   cloudflare_zone_id = data.cloudflare_zone.main_domain.id
