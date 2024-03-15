@@ -130,3 +130,4 @@ terraform.rc
 .terraform.lock.hcl
 localTerraform.sh
 setLocalVariables.sh
+*.pem
