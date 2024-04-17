@@ -45,6 +45,10 @@ locals {
       description = "Further information is requested"
       color       = "d876e3"
     }
+    tooling = {
+      description = "Related to project internal processes or tooling"
+      color       = "7f8c8d"
+    }
     wontfix = {
       description = "This will not be worked on"
       color       = "ffffff"
