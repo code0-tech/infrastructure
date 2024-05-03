@@ -48,7 +48,7 @@ resource "gitlab_pages_domain" "this" {
 
 //noinspection HILUnresolvedReference
 resource "cloudflare_record" "gitlab_pages_verification" {
-  name = "_gitlab-pages-verification-code.${var.cloudflare_domain_name}"
+  name = "_gitlab-pages-verification-code${var.cloudflare_domain_name == "@" ? "" : format(".%s", var.cloudflare_domain_name)}"
   type = "TXT"
   zone_id = var.cloudflare_zone_id
   value = gitlab_pages_domain.this.verification_code
