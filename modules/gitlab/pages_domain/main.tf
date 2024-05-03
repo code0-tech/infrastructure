@@ -52,5 +52,5 @@ resource "cloudflare_record" "gitlab_pages_verification" {
   type = "TXT"
   zone_id = var.cloudflare_zone_id
   value = gitlab_pages_domain.this.verification_code
-  comment  = "Managed by Terraform"
+  comment  = "Managed by Terraform | Pages verification for ${cloudflare_record.gitlab_pages.hostname}"
 }
