@@ -36,11 +36,11 @@ provider "github" {
 }
 
 module "domain" {
-  source = "./system/domain"
+  source = "../../system/domain"
   cloudflare_account_id = var.cloudflare_account_id
   cloudflare_api_token = var.cloudflare_api_token
 }
 
 module "github" {
-  source = "./system/github"
+  source = "../../system/github"
 }
