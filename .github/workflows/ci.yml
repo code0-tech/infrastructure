@@ -25,10 +25,14 @@ jobs:
           SHOW_JOB_LOGS: none
         env:
           GLPA_C0_GH_REF: ${{ github.ref }}
+          GLPA_C0_SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+          GLPA_C0_PIPELINE_SSH_KEY: ${{ secrets.PIPELINE_SSH_KEY }}
           GLPA_TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GLPA_TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GLPA_TF_VAR_gitlab_api_token: ${{ secrets.GL_API_TOKEN }}
           GLPA_TF_VAR_github_app_key: ${{ secrets.GH_TF_APP_KEY }}
+          GLPA_TF_VAR_server_administration_ip: ${{ secrets.SERVER_ADMINISTRATION_IP }}
+          GLPA_TF_VAR_server_administration_ssh_port: ${{ secrets.SERVER_ADMINISTRATION_SSH_PORT }}
 
       - name: Find existing comment
         uses: peter-evans/find-comment@v3

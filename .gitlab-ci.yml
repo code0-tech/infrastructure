@@ -6,6 +6,15 @@ default:
   tags:
     - infra
 
+.ssh:
+  before_script:
+    - IFS=
+    - mkdir ~/.ssh
+    - touch ~/.ssh/known_hosts
+    - echo $C0_SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
+    - eval `ssh-agent -s`
+    - echo "$C0_PIPELINE_SSH_KEY" | tr -d '\r' | ssh-add -
+
 .tf:
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
   before_script:
@@ -62,3 +71,21 @@ tf-apply:main:
   needs:
     - tf-plan:main
   variables: !reference ["tf-plan:main", variables]
+
+tf-plan:server_administration:
+  extends:
+    - .tf-plan
+  before_script:
+    - !reference [.ssh, before_script]
+    - !reference [.tf, before_script]
+  variables:
+    TF_STATE_NAME: server_administration
+    TF_ROOT: 'envs/server_administration'
+
+tf-apply:server_administration:
+  extends:
+    - .tf-apply
+  before_script: !reference [tf-plan:server_administration, before_script]
+  needs:
+    - tf-plan:server_administration
+  variables: !reference [tf-plan:server_administration, variables]
