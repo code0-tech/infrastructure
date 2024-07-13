@@ -45,7 +45,7 @@ default:
   stage: terraform-apply
   resource_group: tf/$TF_STATE_NAME
   script:
-    - gitlab-terraform apply | tee output
+    - gitlab-terraform apply $TF_ARGS | tee output
     - |
       echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
       grep "Apply complete!" output | sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g"
@@ -81,6 +81,7 @@ tf-plan:server_administration:
   variables:
     TF_STATE_NAME: server_administration
     TF_ROOT: 'envs/server_administration'
+    TF_ARGS: '-parallelism=1'
 
 tf-apply:server_administration:
   extends:

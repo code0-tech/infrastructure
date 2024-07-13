@@ -23,6 +23,9 @@ provider "docker" {
   cert_path = ""
 }
 
-resource "docker_network" "test" {
-  name = "test"
+module "administration" {
+  source = "../../system/administration"
+
+  cloudflare_account_id    = var.cloudflare_account_id
+  server_administration_ip = var.server_administration_ip
 }
