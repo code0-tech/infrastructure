@@ -146,6 +146,15 @@ resource "docker_container" "plane_web" {
     name    = docker_network.plane.name
     aliases = ["web"]
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.plane_api.id,
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
+  }
 }
 
 //noinspection HILUnresolvedReference
@@ -164,6 +173,15 @@ resource "docker_container" "plane_space" {
     name    = docker_network.plane.name
     aliases = ["space"]
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.plane_api.id,
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
+  }
 }
 
 //noinspection HILUnresolvedReference
@@ -181,6 +199,15 @@ resource "docker_container" "plane_admin" {
   networks_advanced {
     name    = docker_network.plane.name
     aliases = ["admin"]
+  }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.plane_api.id,
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
   }
 }
 
@@ -205,6 +232,14 @@ resource "docker_container" "plane_api" {
     name    = docker_network.plane.name
     aliases = ["api"]
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
+  }
 }
 
 //noinspection HILUnresolvedReference
@@ -227,6 +262,14 @@ resource "docker_container" "plane_worker" {
   networks_advanced {
     name = docker_network.plane.name
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
+  }
 }
 
 //noinspection HILUnresolvedReference
@@ -248,6 +291,14 @@ resource "docker_container" "plane_beat_worker" {
 
   networks_advanced {
     name = docker_network.plane.name
+  }
+
+  lifecycle {
+    replace_triggered_by = [
+      docker_container.postgres.id,
+      docker_container.valkey.id,
+      docker_container.minio.id,
+    ]
   }
 }
 
