@@ -19,7 +19,7 @@ resource "docker_image" "plane_proxy" {
 }
 
 resource "docker_image" "postgres" {
-  name = "postgres:15.5-alpine"
+  name = "postgres:15.7-alpine"
 }
 
 resource "docker_image" "valkey" {
