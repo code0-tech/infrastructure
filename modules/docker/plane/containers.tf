@@ -57,7 +57,7 @@ locals {
     "AWS_REGION=",
     "AWS_ACCESS_KEY_ID=${random_password.minio_access_key_id.result}",
     "AWS_SECRET_ACCESS_KEY=${random_password.minio_secret_access_key.result}",
-    "AWS_S3_ENDPOINT_URL=http://${docker_container.minio.name}:9000",
+    "AWS_S3_ENDPOINT_URL=${docker_container.minio.name}:9000",
     "AWS_S3_BUCKET_NAME=plane-uploads",
 
     ### ADMIN / SPACE URLS
