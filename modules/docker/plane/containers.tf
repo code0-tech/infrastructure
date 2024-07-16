@@ -41,13 +41,13 @@ locals {
     "GUNICORN_WORKERS=1",
 
     ### DB
-    "PGHOST=${docker_container.postgres.name}",
-    "DATABASE_URL=postgresql://plane:${random_password.db.result}@${docker_container.postgres.name}/plane",
+    "PGHOST=${docker_container.postgres.hostname}",
+    "DATABASE_URL=postgresql://plane:${random_password.db.result}@${docker_container.postgres.hostname}/plane",
 
     ### REDIS
     "REDIS_HOST=${docker_container.valkey.name}",
     "REDIS_PORT=6379",
-    "REDIS_URL=redis://${docker_container.valkey.name}:6379",
+    "REDIS_URL=redis://${docker_container.valkey.hostname}:6379",
 
     ### APPLICATION SECRET
     "SECRET_KEY=${random_password.application_secret.result}",
@@ -57,8 +57,8 @@ locals {
     "AWS_REGION=",
     "AWS_ACCESS_KEY_ID=${random_password.minio_access_key_id.result}",
     "AWS_SECRET_ACCESS_KEY=${random_password.minio_secret_access_key.result}",
-    "AWS_S3_ENDPOINT_URL=${docker_container.minio.name}:9000",
-    "AWS_S3_BUCKET_NAME=plane-uploads",
+    "AWS_S3_ENDPOINT_URL=http://${docker_container.minio.hostname}:9000",
+    "AWS_S3_BUCKET_NAME=uploads",
 
     ### ADMIN / SPACE URLS
     "ADMIN_BASE_URL=",
@@ -113,7 +113,7 @@ resource "docker_container" "minio" {
   name    = "plane_minio"
   restart = "always"
 
-  command = ["server", "/export", "--console-address", ":9090"]
+  command = ["server", "/export", "--console-address", ":9090", "--address", ":9000"]
 
   env = local.minio_env
 
@@ -344,7 +344,7 @@ resource "docker_container" "plane_proxy" {
 
   env = [
     "VIRTUAL_HOST=plane.code0.tech",
-    "BUCKET_NAME=plane-uploads",
+    "BUCKET_NAME=uploads",
     "FILE_SIZE_LIMIT=5242880"
   ]
 
