@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.38.0"
+      version = "4.40.0"
     }
     gitlab = {
       source = "gitlabhq/gitlab"
@@ -20,7 +20,7 @@ resource "cloudflare_record" "gitlab_pages" {
   name     = var.cloudflare_domain_name
   type     = "CNAME"
   zone_id  = var.cloudflare_zone_id
-  value    = var.gitlab_unique_pages_url
+  content  = var.gitlab_unique_pages_url
   proxied  = true
   comment  = "Managed by Terraform"
 }
@@ -51,6 +51,6 @@ resource "cloudflare_record" "gitlab_pages_verification" {
   name = "_gitlab-pages-verification-code${var.cloudflare_domain_name == "@" ? "" : format(".%s", var.cloudflare_domain_name)}"
   type = "TXT"
   zone_id = var.cloudflare_zone_id
-  value = gitlab_pages_domain.this.verification_code
+  content = gitlab_pages_domain.this.verification_code
   comment  = "Managed by Terraform | Pages verification for ${cloudflare_record.gitlab_pages.hostname}"
 }
