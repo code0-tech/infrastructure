@@ -46,7 +46,7 @@ resource "cloudflare_record" "github_verification" {
   name    = "_github-challenge-code0-tech-org"
   type    = "TXT"
   zone_id = data.cloudflare_zone.main_domain.id
-  value   = "e3447326f4"
+  content = "e3447326f4"
   comment = "Managed by Terraform"
 }
 
@@ -54,7 +54,7 @@ resource "cloudflare_record" "strato_spf" {
   name    = "@"
   type    = "TXT"
   zone_id = data.cloudflare_zone.main_domain.id
-  value   = "v=spf1 redirect=smtp.strato.de"
+  content = "v=spf1 redirect=smtp.strato.de"
   comment = "Managed by Terraform"
 }
 
@@ -62,6 +62,6 @@ resource "cloudflare_record" "strato_dkim" {
   name    = "strato-dkim-0002._domainkey"
   type    = "CNAME"
   zone_id = data.cloudflare_zone.main_domain.id
-  value   = "strato-dkim-0002._domainkey.strato.de"
+  content = "strato-dkim-0002._domainkey.strato.de"
   comment = "Managed by Terraform"
 }
