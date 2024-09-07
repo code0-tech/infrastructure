@@ -35,7 +35,7 @@ resource "cloudflare_record" "server_ip" {
   name    = "server_administration"
   type    = "A"
   zone_id = data.cloudflare_zone.main_domain.id
-  value   = var.server_administration_ip
+  content = var.server_administration_ip
   proxied = true
 
   comment = "Managed by Terraform"
@@ -49,7 +49,7 @@ resource "cloudflare_record" "server_cname" {
   name    = each.value
   type    = "CNAME"
   zone_id = data.cloudflare_zone.main_domain.id
-  value   = cloudflare_record.server_ip.hostname
+  content = cloudflare_record.server_ip.hostname
   proxied = true
 
   comment = "Managed by Terraform"
