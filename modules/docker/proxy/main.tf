@@ -12,7 +12,7 @@ terraform {
 }
 
 resource "docker_image" "proxy" {
-  name = "jwilder/nginx-proxy:1.6.1"
+  name = "jwilder/nginx-proxy:1.6.2"
 }
 
 resource "docker_network" "proxy" {
