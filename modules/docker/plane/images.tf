@@ -23,7 +23,7 @@ resource "docker_image" "postgres" {
 }
 
 resource "docker_image" "valkey" {
-  name = "valkey/valkey:7.2.5-alpine"
+  name = "valkey/valkey:8.0.1-alpine"
 }
 
 resource "docker_image" "minio" {
