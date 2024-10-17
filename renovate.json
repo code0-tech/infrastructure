@@ -4,5 +4,13 @@
     "config:recommended",
     ":assignee(Taucher2003)",
     ":label(dependencies)"
+  ],
+  "packageRules": [
+    {
+      "matchFileNames": [
+        "modules/docker/plane/**"
+      ],
+      "dependencyDashboardApproval": true
+    }
   ]
 }
