@@ -11,8 +11,13 @@ terraform {
   }
 }
 
-resource "docker_image" "proxy" {
+data "docker_registry_image" "proxy" {
   name = "nginxproxy/nginx-proxy:1.6.3"
+}
+
+resource "docker_image" "proxy" {
+  name          = data.docker_registry_image.proxy.name
+  pull_triggers = [data.docker_registry_image.proxy.sha256_digest]
 }
 
 resource "docker_network" "proxy" {
