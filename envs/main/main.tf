@@ -8,7 +8,7 @@ terraform {
     }
     gitlab = {
       source = "gitlabhq/gitlab"
-      version = "17.6.1"
+      version = "17.7.0"
     }
     github = {
       source  = "integrations/github"
