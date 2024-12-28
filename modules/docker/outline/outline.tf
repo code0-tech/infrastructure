@@ -95,7 +95,7 @@ locals {
     "SMTP_FROM_EMAIL=${data.gitlab_project_variable.smtp_from_email.value}",
     "GITHUB_CLIENT_ID=${data.gitlab_project_variable.github_client_id.value}",
     "GITHUB_CLIENT_SECRET=${data.gitlab_project_variable.github_client_secret.value}",
-    "GITHUB_APP_NAME=Code0 Outline",
+    "GITHUB_APP_NAME=code0-outline",
     "GITHUB_APP_ID=${data.gitlab_project_variable.github_app_id.value}",
     "GITHUB_APP_PRIVATE_KEY=${data.gitlab_project_variable.github_app_private_key.value}",
 
