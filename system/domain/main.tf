@@ -65,3 +65,25 @@ resource "cloudflare_record" "strato_dkim" {
   content = "strato-dkim-0002._domainkey.strato.de"
   comment = "Managed by Terraform"
 }
+
+resource "cloudflare_ruleset" "force_https" {
+  kind  = "zone"
+  name  = "force_https"
+  phase = "http_request_dynamic_redirect"
+  zone_id = data.cloudflare_zone.main_domain.id
+
+  rules {
+    ref = "redirect_http"
+    expression = "(http.request.full_uri wildcard r\"http://*\")"
+    action = "redirect"
+    action_parameters {
+      from_value {
+        status_code = 302
+        target_url {
+          expression = "wildcard_replace(http.request.full_uri, \"http://*\", \"https://${"$"}{1}\")"
+        }
+        preserve_query_string = true
+      }
+    }
+  }
+}
