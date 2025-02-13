@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.52.0"
+      version = "5.1.0"
     }
     docker = {
       source  = "kreuzwerker/docker"
@@ -11,9 +11,11 @@ terraform {
   }
 }
 
-data "cloudflare_zone" "main_domain" {
-  account_id = var.cloudflare_account_id
-  name       = "code0.tech"
+data "cloudflare_zones" "main_domain" {
+  account = {
+    id = var.cloudflare_account_id
+  }
+  name = "code0.tech"
 }
 
 module "proxy" {
@@ -39,26 +41,28 @@ module "outline" {
   docker_proxy_network_id = module.proxy.docker_proxy_network_id
 }
 
-resource "cloudflare_record" "server_ip" {
-  name    = "server_administration"
+resource "cloudflare_dns_record" "server_ip" {
+  name    = "server_administration.code0.tech"
   type    = "A"
-  zone_id = data.cloudflare_zone.main_domain.id
+  ttl     = 1
+  zone_id = data.cloudflare_zones.main_domain.result[0].id
   content = var.server_administration_ip
   proxied = true
 
   comment = "Managed by Terraform"
 }
 
-resource "cloudflare_record" "server_cname" {
+resource "cloudflare_dns_record" "server_cname" {
   for_each = toset([
-    "plane",
-    "outline",
+    "plane.code0.tech",
+    "outline.code0.tech",
   ])
 
   name    = each.value
   type    = "CNAME"
-  zone_id = data.cloudflare_zone.main_domain.id
-  content = cloudflare_record.server_ip.hostname
+  ttl     = 1
+  zone_id = data.cloudflare_zones.main_domain.result[0].id
+  content = cloudflare_dns_record.server_ip.name
   proxied = true
 
   comment = "Managed by Terraform"

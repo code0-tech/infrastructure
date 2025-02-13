@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.52.0"
+      version = "5.1.0"
     }
   }
 }
@@ -26,12 +26,19 @@ resource "tls_cert_request" "this" {
   }
 }
 
+resource "time_rotating" "rotation" {
+  rotation_days = 365 - 90 # requested_validity - 90 days for rotation
+}
+
 resource "cloudflare_origin_ca_certificate" "this" {
   csr                  = tls_cert_request.this.cert_request_pem
   hostnames            = [ var.hostname ]
   request_type         = "origin-rsa"
   requested_validity   = 365
-  min_days_for_renewal = 90
+
+  lifecycle {
+    replace_triggered_by = [time_rotating.rotation.id]
+  }
 }
 
 output "hostname" {
