@@ -26,7 +26,7 @@ default:
   stage: terraform-plan
   resource_group: tf/$TF_STATE_NAME
   script:
-    - gitlab-terraform plan | tee output
+    - gitlab-terraform plan $TF_ARGS | tee output
     - gitlab-terraform plan-json
     - |
       echo -e "\e[0Ksection_start:`date +%s`:glpa_summary\r\e[0KHeader of the summary"
@@ -71,6 +71,20 @@ tf-apply:main:
   needs:
     - tf-plan:main
   variables: !reference ["tf-plan:main", variables]
+
+tf-plan:github:
+  extends:
+    - .tf-plan
+  variables:
+    TF_STATE_NAME: github
+    TF_ROOT: 'envs/github'
+
+tf-apply:github:
+  extends:
+    - .tf-apply
+  needs:
+    - tf-plan:github
+  variables: !reference ["tf-plan:github", variables]
 
 tf-plan:server_administration:
   extends:
