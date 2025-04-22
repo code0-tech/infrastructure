@@ -1,9 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":assignee(Taucher2003)",
-    ":label(dependencies)"
+    "github>code0-tech/internal-tooling//renovate/global.json5",
+    ":assignee(Taucher2003)"
   ],
   "packageRules": [
     {
@@ -11,6 +10,24 @@
         "modules/docker/plane/**"
       ],
       "dependencyDashboardApproval": true
+    },
+    {
+      "matchDepNames": ["postgres", "redis", "valkey/valkey"],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "modules/docker/.+\\.tf$"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}docker{{/if}}",
+      "matchStrings": [
+        "\"(?<depName>.*?):(?<currentValue>.*?)\" # renovate: docker( versioning=(?<versioning>.*?))?"
+      ]
     }
   ]
 }
