@@ -12,9 +12,24 @@
       "dependencyDashboardApproval": true
     },
     {
-      "matchDepNames": ["postgres", "redis", "valkey/valkey"],
-      "matchUpdateTypes": ["major"],
+      "matchDepNames": [
+        "postgres",
+        "redis",
+        "valkey/valkey"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "dependencyDashboardApproval": true
+    },
+    {
+      "matchFileNames": [
+        "modules/docker/**"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "additionalBranchPrefix": "{{parentDir}}-"
     }
   ],
   "customManagers": [
