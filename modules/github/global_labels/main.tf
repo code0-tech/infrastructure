@@ -13,6 +13,10 @@ locals {
       description = "Something isn't working"
       color       = "d73a4a"
     }
+    blocked = {
+      description = "This is blocked by some other work"
+      color       = "9e2204"
+    }
     dependencies = {
       description = "This updates dependency files"
       color       = "009966"
